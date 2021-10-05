@@ -5,12 +5,13 @@ namespace app\controllers;
 use app\models;
 
 
-class Add extends \app\Controller
+class Edit extends \app\Controller
 {
+    
     function __construct ()
     {
 
-      $this->model = new \app\models\Addtask;
+      $this->model = new \app\models\Edittask;
       
     }
 
@@ -19,7 +20,7 @@ class Add extends \app\Controller
         
         $data = $this->model->run( $_GET );
         
-        return $this->render( 'addtask', $data );
+        return $this->render('edittask', $data );
         
     }
     

@@ -5,12 +5,11 @@ namespace app\controllers;
 use app\models;
 
 
-class Add extends \app\Controller
+class Delete extends \app\Controller
 {
-    function __construct ()
-    {
+    function __construct (){
 
-      $this->model = new \app\models\Addtask;
+      $this->model = new \app\models\Deletetask;
       
     }
 
@@ -19,7 +18,7 @@ class Add extends \app\Controller
         
         $data = $this->model->run( $_GET );
         
-        return $this->render( 'addtask', $data );
+        return $this->render( 'deletetask', $data );
         
     }
     
