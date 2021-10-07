@@ -9,7 +9,7 @@ class Home extends \app\Model
     
     const COUNT_ON_PAGE = 3;
 
-    const DEFAUL_SORT_FIELD = 'user_name';
+    const DEFAUL_SORT_FIELD = 'user_name_asc';
 
     public function run ( $params = [] )
     { 
@@ -20,7 +20,7 @@ class Home extends \app\Model
 
         $_SESSION['order'] = $_GET['order'];
 
-        header('Location: /');
+        header('Location: '.$_SERVER['HTTP_REFERER']);
 
         exit();
 
@@ -34,12 +34,18 @@ class Home extends \app\Model
 
       $_GET['page'] = is_numeric( $_GET['page'] ) ? $_GET['page'] : 1;
 
+      $Order = explode('_', $_SESSION['order'] );
+
+      $order_direction = array_slice( $Order, -1 )[0];
+
+      $order_direction = in_array( $order_direction, ['asc', 'desc'] ) ? $order_direction : 'asc';
+
       $tasks = $db->execute(
         'tasks', 
         null,
         [
           'limit' => [ $count_on_page * ( is_numeric( $_GET['page'] ) ? $_GET['page'] -1 : 0 ), $count_on_page],
-          'order' => [ $_SESSION['order'] => 'ask' ]
+          'order' => [ implode('_', array_slice( $Order, 0, -1 ) ) => $order_direction ]
         ]
       );
 
@@ -63,31 +69,38 @@ class Home extends \app\Model
 
           for( $p = 1; $p < $count_pages + 1; ++$p ){
 
-            $p_link = ( is_numeric( $_GET['page'] ) && $_GET['page'] == $p ) ? $p : '<a href="?page='.$p.'">'.$p.'</a>';
+            $p_link = ( is_numeric( $_GET['page'] ) && $_GET['page'] == $p ) ? '<span class="nav-link px-2 text-muted ">'.$p.'</span>' : '<a href="?page='.$p.'" class="nav-link px-2">'.$p.'</a>';
 
-            $Pages[] = '<span style="padding-right:.25rem;padding-left:.25rem">'.$p_link.'</span>';
+            $Pages[] = '<li class="nav-item">'.$p_link.'</li>';
 
           }
 
-          $pagination = '<div>Стр.: '.implode('', $Pages).'</div>';
+          $pagination = '<ul class="nav justify-content-center border-bottom pb-3 mb-3 mt-4"><li class="nav-item"><span class="nav-link px-2 text-muted">Стр: </span></li>'.implode('', $Pages).'</ul>';
 
         }
 
         if( $count_tasks > 1 ){
 
-          $order_options = '<form method="GET" action="">
-            <lable>Сортировка: </label>
-            <select name="order">
-              '.$task->get_order_options().'
-            </select>
-            <input type="submit" value="Упорядочить">
-          </form>';
+          $order_options = '
+          <div class="row">
+            <div class="col-sm-6">
+              <form method="GET" action="">
+              <div class="input-group my-5">
+                  <select class="form-select" id="sort" name="order">
+                    '.$task->get_order_options().'
+                  </select>
+                  <input class="btn btn-secondary" type="submit" value="Упорядочить">
+                </div>
+              </form>
+            </div>
+          </div>
+          ';
 
         }
 
       }else{
 
-        $tasks_list = 'Задач не создано';
+        $message = '<div class="py-5 text-center">Задач не создано</div>';
 
       }
 

@@ -20,6 +20,7 @@ class Edittask extends \app\Model
           $_SESSION['message'] = 'Задача #'.$task->task_id.' исправлена';
 
           header('Location: /');
+          
           exit;
 
         }
@@ -29,11 +30,11 @@ class Edittask extends \app\Model
       return [
         'page_title' => 'Редактировать задачу', 
         'task_id' => $task->task_id, 
-        'task_name' => $task->task_name, 
-        'task_body' => base64_decode( $task->task_body ),
-        'task_closed' => $task->task_closed,
-        'user_name' => $task->user_name, 
-        'user_email' => $task->user_email, 
+        'task_name' => $params['task_name'] ?? $task->task_name, 
+        'task_body' => $params['task_body'] ?? base64_decode( $task->task_body ),
+        'task_closed' => $params['task_closed'] ?? $task->task_closed,
+        'user_name' => $params['user_name'] ?? $task->user_name, 
+        'user_email' => $params['user_email'] ?? $task->user_email, 
         'submit_text' => 'Исправить', 
         'error_message' => $result['error_message']  
       ];
