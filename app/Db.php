@@ -72,7 +72,9 @@ class Db
 
             }
 
-            ( $order_direction == 'ask' ) ? ksort( $Sort ) : krsort( $Sort ) ;
+
+
+            ( $order_direction == 'asc' ) ? ksort( $Sort ) : krsort( $Sort ) ;
 
             $_Data = [];
 
@@ -251,8 +253,6 @@ class Db
             $result['error_message'] = 'Не могу записать данные в файл.';
 
           }
-          
-          fclose( $handle );
 
       }else{
 
@@ -326,8 +326,6 @@ class Db
           $result['error_message'] = 'Не могу записать в файл.';
 
         }
-        
-        fclose( $handle );
 
       }else{
 
@@ -378,7 +376,7 @@ class Db
         case 'task_date_edited':
 
             $result['status'] = 'success';
-            
+
           break;
         default:
 

@@ -38,7 +38,7 @@ class Controller
 
         ob_end_clean();
 
-        if ( defined( NO_LAYOUT ) ){
+        if ( NO_LAYOUT ){
 
           return $body;
 

@@ -15,34 +15,34 @@ class App
     public static function init ()
     {
       
-      spl_autoload_register(['static','load_class']);
+      spl_autoload_register( [ 'static', 'load_class' ] );
 
       static::bootstrap();
 
-      set_exception_handler(['app\app','handle_exception']);
+      set_exception_handler( [ 'app\app', 'handle_exception' ] );
     }
     
     public static function bootstrap ()
     {   
 
-      static::$router = new \app\Router();
+      static::$router = new \app\Router ();
 
-      static::$kernel = new \app\Kernel();
+      static::$kernel = new \app\Kernel ();
 
-      static::$db = new \app\Db();
+      static::$db = new \app\Db ();
 
     }
     
     public static function load_class ( $class_name )
     {
        
-      $class_name = str_replace('\\', DIRECTORY_SEPARATOR, $class_name );
+      $class_name = str_replace( '\\', DIRECTORY_SEPARATOR, $class_name );
 
       require_once ROOTPATH.DIRECTORY_SEPARATOR.$class_name.'.php';
         
     }
     
-    public function handle_exception ( \Throwable $e )
+    public static function handle_exception ( \Throwable $e )
     {
          
       if( $e instanceof \app\exceptions\InvalidRouteException ) {
