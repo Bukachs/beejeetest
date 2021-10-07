@@ -17,6 +17,8 @@ session_start();
 
 define('ROOTPATH', __DIR__);
 
+define( 'NO_LAYOUT', FALSE );
+
 require __DIR__.'/app/App.php';
      
 App::init();
