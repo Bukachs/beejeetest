@@ -7,9 +7,12 @@ class Task{
   const INDEX_KEY = 'task_id';
 
   const ORDER_OPTIONS = [
-    'user_name' => 'Имя пользователя',
-    'user_email' => 'Эл. почта',
-    'task_body' => 'Текст задачи'
+    'user_name_asc' => 'Имя пользователя ↓',
+    'user_name_desc' => 'Имя пользователя ↑',
+    'user_email_asc' => 'Эл. почта ↓',
+    'user_email_desc' => 'Эл. почта ↑',
+    'task_body_asc' => 'Текст задачи ↓',
+    'task_body_desc' => 'Текст задачи ↑'
   ];
 
   function __construct( $_task= null ){
@@ -93,11 +96,27 @@ class Task{
 
       if( isset( $this->task_body ) ) $task_body = '<p>'.implode( '</p><p>', explode("\r\n", base64_decode( $this->task_body ) ) ).'</p>';
 
-      return '<li style="margin-bottom:2rem">
-                  <div>#'.$this->task_id.' '.( $this->task_closed ? ' Выполнена! ' : '' ).' '.( $this->task_date_edited ? 'Отредактирована администратором '.strftime('%Y-%m-%d %H:%M:%S', strtotime( $this->task_date_edited ) ) : '' ).' '.$this->user_name.' '.$this->user_email.' '.$this->task_name.'</div>
-                  <div>'.$task_body.'</div>
-                  '.( ( $_SESSION['is_admin'] ) ? '<div><a href="/edit/?task_id='.$this->task_id.'">Править</a> <a href="/delete/?task_id='.$this->task_id.'">Удалить</a></div>' : '' ).'
-            </li>';
+      return '<div class="col">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h2 class="card-title">#'.$this->task_id.' '.$this->task_name.'</h2>
+            <p class="card-text text-muted">'.$this->user_name.' > '.$this->user_email.'</p>
+            <p class="card-text">'.$task_body.'</p>
+            <div class="d-flex justify-content-between align-items-center">
+              '.( $_SESSION['is_admin'] ? '
+              <div class="btn-group">
+                <a href="/edit/?task_id='.$this->task_id.'" type="button" class="btn btn-sm btn-outline-secondary">Править</a>
+                <a href="/delete/?task_id='.$this->task_id.'" type="button" class="btn btn-sm btn-outline-secondary">Удалить</a>
+              </div>' : '' ).'
+              <div>
+              '.( $this->task_closed ? '<small class="text-muted">Выполнена!</small>' : '' ).'
+              </div>
+            </div>
+            '.( $this->task_date_edited ? '<div class="mt-2"><small class="text-muted" title="Дата редактирования: '.strftime('%Y-%m-%d %H:%M:%S', strtotime( $this->task_date_edited ) ).'">Отредактирована администратором</small></div>' : '' ).'
+          </div>
+        </div>
+      </div>';
+
   }
 
   function get_order_options() : string {
